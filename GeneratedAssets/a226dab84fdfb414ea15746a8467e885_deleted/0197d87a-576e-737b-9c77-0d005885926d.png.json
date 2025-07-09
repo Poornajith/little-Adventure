@@ -1,0 +1,20 @@
+{
+    "asset": "a226dab84fdfb414ea15746a8467e885",
+    "fileName": "0197d87a-576e-737b-9c77-0d005885926d.png",
+    "prompt": "cute anim girl idle, walk, jump and run sprite sheet",
+    "negativePrompt": "",
+    "model": "186d3549-08b7-44a2-a283-dd9967f49c87",
+    "modelName": "Cel-shaded",
+    "customSeed": -1,
+    "w3CTraceId": "843b669ea359de09098be711ac8436e8",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}
