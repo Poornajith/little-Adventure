@@ -16,8 +16,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundLayer;
 
+    protected Animator animator;
+
     private Rigidbody2D rb;
-    private Animator animator;
     private bool isGrounded;
     private bool isFacingRight = true;
 
@@ -72,10 +73,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void Flip()
     {
+        if (isFacingRight)
+        {
+            transform.rotation = Quaternion.Euler(0f, 180f, 0f); // Facing right (or initial direction)
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f); // Facing left
+        }
         isFacingRight = !isFacingRight;
-        Vector3 localScale = transform.localScale;
-        localScale.x *= -1;
-        transform.localScale = localScale;
+        //Vector3 localScale = transform.localScale;
+        //localScale.x *= -1;
+        //transform.localScale = localScale;
     }
 
     private void OnDrawGizmosSelected()
