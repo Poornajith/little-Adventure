@@ -6,38 +6,51 @@ public class LazerCannonController : MonoBehaviour
     [SerializeField] private GameObject lazerPrefab;
     [SerializeField] private Transform lazerSpawnPoint;
     [SerializeField] private float lazerCooldown = 1f;
+    [SerializeField] private BulletPool bulletPool;
+    [SerializeField] private MuzzleSplashPool muzzleSplashPool;
 
     private float lastLazerTime = 0f;
-    private Animator animator;
+    private PlayerController playerController; // Reference to the central controller
 
-    private void Start()
+    private void Awake() // Use Awake to get the controller reference early
     {
-        // Initialize animator if available
-        animator = GetComponent<Animator>();
-        if (animator == null)
+        playerController = GetComponent<PlayerController>();
+        if (playerController == null)
         {
-            Debug.LogWarning("Animator component not found on LazerCannonController!");
+            Debug.LogError("LazerCannonController: PlayerController component not found on this GameObject!");
         }
     }
+
     private void Update()
     {
         // Handle lazer firing
         if (Input.GetButtonDown("Fire1") && Time.time >= lastLazerTime + lazerCooldown)
         {
-            FireLazer();
+            //FireLazer();
+            playerController.Animator?.SetTrigger("Shoot");
             lastLazerTime = Time.time;
         }
     }
-    private void FireLazer()
+
+    public void FireLazer()
     {
-        if (lazerPrefab != null && lazerSpawnPoint != null)
-        {
-            Instantiate(lazerPrefab, lazerSpawnPoint.position, lazerSpawnPoint.rotation);
-        }
-        else
-        {
-            Debug.LogWarning("Lazer prefab or spawn point is not set!");
-        }
-        animator?.SetTrigger("Shoot"); // Trigger the firing animation if animator is available
+        //if (lazerPrefab != null && lazerSpawnPoint != null)
+        //{
+        //    // Instantiate with the spawn point's position and rotation
+        //    Instantiate(lazerPrefab, lazerSpawnPoint.position, lazerSpawnPoint.rotation);
+        //}
+        //else
+        //{
+        //    Debug.LogWarning("Lazer prefab or spawn point is not set!");
+        //}
+
+        // Trigger the firing animation using the Animator from PlayerController
+        Bullet bullet = bulletPool.Get();
+        bullet.transform.position = lazerSpawnPoint.position;
+        bullet.transform.rotation = lazerSpawnPoint.rotation;
+
+        MuzzleSplash muzzleSplash = muzzleSplashPool.Get();
+        muzzleSplash.transform.position = lazerSpawnPoint.position;
+        muzzleSplash.transform.rotation = lazerSpawnPoint.rotation;
     }
 }

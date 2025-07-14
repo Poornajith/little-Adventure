@@ -16,52 +16,44 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundLayer;
 
-    protected Animator animator;
+    private PlayerController playerController; // Reference to the central controller
 
-    private Rigidbody2D rb;
-    private bool isGrounded;
-    private bool isFacingRight = true;
+    private bool isGrounded; // This can remain local to movement logic
 
-    private void Start()
+    private void Awake() // Use Awake to get the controller reference early
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        playerController = GetComponent<PlayerController>();
+        if (playerController == null)
+        {
+            Debug.LogError("PlayerMovement: PlayerController component not found on this GameObject!");
+        }
     }
 
     private void Update()
     {
         // Handle movement
         float moveInput = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        playerController.Rigidbody.linearVelocity = new Vector2(moveInput * moveSpeed, playerController.Rigidbody.linearVelocity.y);
 
         // Update animator parameters
-        animator.SetFloat("Blend", Mathf.Abs(moveInput)); // Assuming "Blend" is used for running animation
-        animator.SetBool("IsGrounded", isGrounded);
-
-        if(Mathf.Abs(rb.linearVelocity.x) > 0f && isGrounded)
-        {
-            animator.SetBool("IsRunning", true);
-        }
-        else
-        {
-            animator.SetBool("IsRunning", false);
-        }
+        playerController.Animator.SetFloat("Blend", Mathf.Abs(moveInput));
+        playerController.Animator.SetBool("IsGrounded", isGrounded);
 
         // Flip the sprite based on movement direction
-        if (moveInput > 0 && !isFacingRight)
+        if (moveInput > 0 && !playerController.IsFacingRight)
         {
-            Flip();
+            playerController.FlipPlayer();
         }
-        else if (moveInput < 0 && isFacingRight)
+        else if (moveInput < 0 && playerController.IsFacingRight)
         {
-            Flip();
+            playerController.FlipPlayer();
         }
 
         // Handle jumping
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            animator.SetTrigger("Jump"); // Assuming "Jump" is the trigger for jump animation
+            playerController.Rigidbody.linearVelocity = new Vector2(playerController.Rigidbody.linearVelocity.x, jumpForce);
+            playerController.Animator.SetTrigger("Jump");
         }
     }
 
@@ -69,22 +61,6 @@ public class PlayerMovement : MonoBehaviour
     {
         // Check if the player is grounded
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-    }
-
-    private void Flip()
-    {
-        if (isFacingRight)
-        {
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f); // Facing right (or initial direction)
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f); // Facing left
-        }
-        isFacingRight = !isFacingRight;
-        //Vector3 localScale = transform.localScale;
-        //localScale.x *= -1;
-        //transform.localScale = localScale;
     }
 
     private void OnDrawGizmosSelected()
