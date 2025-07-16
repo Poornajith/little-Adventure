@@ -33,7 +33,10 @@ public class PlayerMovement : MonoBehaviour
     {
         // Handle movement
         float moveInput = Input.GetAxis("Horizontal");
-        playerController.Rigidbody.linearVelocity = new Vector2(moveInput * moveSpeed, playerController.Rigidbody.linearVelocity.y);
+        if (isGrounded)
+        {
+            playerController.Rigidbody.linearVelocity = new Vector2(moveInput * moveSpeed, playerController.Rigidbody.linearVelocity.y);
+        }
 
         // Update animator parameters
         playerController.Animator.SetFloat("Blend", Mathf.Abs(moveInput));

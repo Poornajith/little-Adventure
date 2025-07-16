@@ -30,4 +30,9 @@ public class Bullet : MonoBehaviour
             pool.ReturnToPool(this);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Deactivate();
+    }
 }
