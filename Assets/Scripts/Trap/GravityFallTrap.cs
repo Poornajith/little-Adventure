@@ -25,7 +25,7 @@ public class GravityFallTrap : Machanism
     {
         if (other.CompareTag("Player"))
         {
-            // deal damage to the player 
+            HealthController.Instance.TakeDamage(1); // Deal damage to the player 
         }
         else
         {

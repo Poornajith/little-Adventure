@@ -1,0 +1,20 @@
+{
+    "asset": "b833437fdb46e574d95325127a68b263",
+    "fileName": "01981324-2435-71ac-bd49-7444b3eb692d.png",
+    "prompt": "Glowing Energy cell, energy battery, heart shaped battery, neon glowing parts on the battery",
+    "negativePrompt": "",
+    "model": "6555098e-bf5d-4fa1-8951-f2627fc68af6",
+    "modelName": "Colorful Digital Icons",
+    "customSeed": -1,
+    "w3CTraceId": "9c1a95cd8df382755aa8e6b6ca8144c9",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}

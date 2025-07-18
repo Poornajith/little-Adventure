@@ -1,0 +1,20 @@
+{
+    "asset": "9fb09f19cb385ff44a406ea9d10cc184",
+    "fileName": "01981321-1fd6-79ce-a046-756bf63bd51d.png",
+    "prompt": "simple Mechanical heart, Heart Icon for UI",
+    "negativePrompt": "",
+    "model": "6555098e-bf5d-4fa1-8951-f2627fc68af6",
+    "modelName": "Colorful Digital Icons",
+    "customSeed": -1,
+    "w3CTraceId": "0ed36e09a39aa2f435fc25176ed930fc",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}
