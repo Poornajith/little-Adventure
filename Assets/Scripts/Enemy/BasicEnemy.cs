@@ -11,6 +11,7 @@ public class BasicEnemy : MonoBehaviour
     [SerializeField] private Transform walkPointA; // First patrol point
     [SerializeField] private Transform walkPointB; // Second patrol point
     [SerializeField] private float patrolSpeed = 2f;
+    [SerializeField] private float chaseSpeed = 2f;
 
     [Header("Player Detection")]
     [SerializeField] private Transform player; // Reference to the player
@@ -19,6 +20,11 @@ public class BasicEnemy : MonoBehaviour
 
     [Header("Attack Settings")]
     [SerializeField] private float timeBetweenAttacks = 2f; // Time between attacks
+    [SerializeField] private int attackDamage = 1; // Damage dealt to the player
+
+    [Header("Death Settings")]
+    [SerializeField] private float deathDelay = 2f; // Delay before destroying the enemy after death
+
     private float attackCooldown = 0f;
 
     private Vector3 currentTarget; // Current patrol target
@@ -90,7 +96,7 @@ public class BasicEnemy : MonoBehaviour
         }
 
         // Switch target when reaching the current patrol point
-        if (Vector2.Distance(transform.position, currentTarget) < 0.1f)
+        if (Mathf.Abs(transform.position.x - currentTarget.x) < 0.1f)
         {
             currentTarget = currentTarget == walkPointA.position ? walkPointB.position : walkPointA.position;
         }
@@ -102,7 +108,7 @@ public class BasicEnemy : MonoBehaviour
     private void ChasePlayer()
     {
         // Move towards the player's position
-        transform.position = Vector2.MoveTowards(transform.position, player.position, patrolSpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, player.position, chaseSpeed * Time.deltaTime);
         // Flip the enemy sprite based on the direction of movement
         if ((player.position.x > transform.position.x && !isFacingRight) || (player.position.x < transform.position.x && isFacingRight))
         {
@@ -117,24 +123,12 @@ public class BasicEnemy : MonoBehaviour
         {
             Debug.Log("Enemy attacks the player!");
 
-            // Example of dealing damage to the player
-            HealthController.Instance.TakeDamage(1);
-
             // Add attack logic here (e.g., reduce player health)
             attackCooldown = timeBetweenAttacks;
             animator?.SetTrigger("Attack"); // Trigger attack animation if available
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        // Draw detection and attack ranges in the editor
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
 
     private void Flip()
     {
@@ -143,5 +137,47 @@ public class BasicEnemy : MonoBehaviour
         Vector3 localScale = transform.localScale;
         localScale.x *= -1;
         transform.localScale = localScale;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Handle collisions with other objects (e.g., bullets)
+        if (collision.CompareTag("Bullet"))
+        {
+            TakeDamage(1);
+            collision.gameObject.SetActive(false); // Deactivate the bullet
+        }
+    }
+
+    private void TakeDamage(int damage)
+    {
+        // Handle taking damage (e.g., reduce health)
+        // Example: HealthController.Instance.TakeDamage(damage);
+        Debug.Log($"Enemy takes {damage} damage!");
+        // If health reaches zero, destroy the enemy
+        // Destroy(gameObject);
+    }
+
+    public void DamagePlayer()
+    {
+        // Method to deal damage to the player
+        HealthController.Instance.TakeDamage(attackDamage);
+    }
+    public void Die()
+    {
+        // Handle enemy death (e.g., play death animation, drop loot)
+        Debug.Log("Enemy died!");
+        animator?.SetTrigger("Dead"); // Trigger death animation if available
+        // Optionally destroy the enemy after a delay
+        Destroy(gameObject, deathDelay);
+    }
+    private void OnDrawGizmosSelected()
+    {
+        // Draw detection and attack ranges in the editor
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
